@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_LIFF_ID: ${VITE_LIFF_ID:?Set VITE_LIFF_ID in .env}
+        VITE_BASE_PATH: ${VITE_BASE_PATH:-/}
+    ports:
+      - '${R9_WEB_PORT:-3000}:80'
+    restart: unless-stopped
