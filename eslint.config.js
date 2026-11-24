@@ -18,4 +18,11 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    files: ['src/routes/**/*.jsx'],
+    rules: {
+      // TanStack's Vite plugin manages route-component HMR and code splitting.
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

@@ -1,6 +1,198 @@
-import { createFileRoute } from '@tanstack/react-router'
-import App from '../App.jsx'
+import { useEffect, useRef, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useDemo } from '../lib/demo-context'
+import AppointmentTicket from '../components/AppointmentTicket'
+import liff from '@line/liff'
+import {
+  BadgeCheck,
+  CalendarCheck,
+  CalendarDays,
+  Check,
+  ChevronRight,
+  Copy,
+  Headset,
+  History,
+  Plus,
+  UserRound,
+  X,
+} from 'lucide-react'
+import { initializeLiff } from '../lib/liff'
+import Card from '../components/Card'
+import PrimaryButton from '../components/PrimaryButton'
 
-export const Route = createFileRoute('/')({
-  component: App,
-})
+export const Route = createFileRoute('/')({ staticData: { title: 'หน้าหลัก' }, component: HomePage })
+
+function HomePage() {
+  const navigate = useNavigate()
+  const { patient, appointment } = useDemo()
+  const [profile, setProfile] = useState(null)
+  const [copied, setCopied] = useState(false)
+  const [dialog, setDialog] = useState(null)
+  const dialogRef = useRef(null)
+  // Example patient data until the hospital API is connected.
+  const hospitalNumber = patient.hn
+
+  useEffect(() => {
+    let active = true
+    initializeLiff()
+      .then(async () => {
+        if (liff.isLoggedIn()) {
+          const lineProfile = await liff.getProfile()
+          if (active) setProfile(lineProfile)
+        }
+      })
+      .catch(() => {
+        // Keep the sample UI available outside LINE or without profile permission.
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (dialog && !dialogRef.current.open) dialogRef.current.showModal()
+  }, [dialog])
+
+  return (
+    <>
+      <main className="home-page">
+        <div className="demo-note">โหมดตัวอย่าง · ยังไม่เชื่อมต่อข้อมูลโรงพยาบาล</div>
+        <Card className="patient-card" aria-label="ข้อมูลผู้ใช้งาน">
+          <div className="patient-avatar">
+            {profile?.pictureUrl ? (
+              <img
+                src={profile.pictureUrl}
+                alt="รูปโปรไฟล์"
+                referrerPolicy="no-referrer"
+                onError={(event) => {
+                  event.currentTarget.hidden = true
+                }}
+              />
+            ) : (
+              <UserRound size={29} strokeWidth={1.5} />
+            )}
+            <span className="patient-badge" aria-label="โปรไฟล์ผู้ใช้งาน">
+              <BadgeCheck size={17} fill="currentColor" />
+            </span>
+          </div>
+          <div className="patient-details min-w-0 flex-1">
+            <h2>คุณ {profile?.displayName || patient.name}</h2>
+            <div className="hospital-number">
+              <span>
+                HN: <strong>{hospitalNumber}</strong>
+              </span>
+              <button
+                type="button"
+                className="copy-button"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(hospitalNumber)
+                    setCopied(true)
+                  } catch {
+                    setDialog({
+                      title: 'หมายเลข HN',
+                      message: `คัดลอกหมายเลขนี้: ${hospitalNumber}`,
+                    })
+                  }
+                }}
+              >
+                {copied ? <Check size={13} /> : <Copy size={13} />}
+                <span>{copied ? 'คัดลอกแล้ว' : 'คัดลอก'}</span>
+              </button>
+            </div>
+            <span className="sr-only" role="status">
+              {copied ? 'คัดลอกหมายเลข HN แล้ว' : ''}
+            </span>
+          </div>
+        </Card>
+
+        <Card className="appointment-card" aria-labelledby="appointment-title">
+          <CalendarCheck
+            className="appointment-illustration"
+            size={44}
+            strokeWidth={2.2}
+            aria-hidden="true"
+          />
+          <h2 id="appointment-title">
+            {appointment ? 'นัดหมายครั้งถัดไปของคุณ' : 'ไม่มีการนัดหมายเร็วๆ นี้'}
+          </h2>
+          {appointment ? (
+            <AppointmentTicket />
+          ) : (
+            <p>
+              ท่านยังไม่มีคิวนัดตรวจที่โรงพยาบาลมหาราชนครราชสีมา สามารถเลือกแผนกและทำการนัดหมายแพทย์ล่วงหน้าได้ทันที
+            </p>
+          )}
+          <PrimaryButton onClick={() => navigate({ to: '/appointments/new' })}>
+            <Plus size={22} strokeWidth={1.8} />
+            นัดหมายใหม่
+          </PrimaryButton>
+        </Card>
+
+        <Card className="appointment-menu" aria-labelledby="appointment-menu-title">
+          <h2 id="appointment-menu-title" className="section-title">
+            เมนูนัด
+          </h2>
+          <div className="appointment-actions grid grid-cols-2 gap-2">
+            <button
+              className="appointment-action"
+              type="button"
+              onClick={() => navigate({ to: '/appointments' })}
+            >
+              <CalendarDays size={37} strokeWidth={1.8} aria-hidden="true" />
+              <strong>เลื่อนนัดหมาย</strong>
+              <span>จัดการคิวเดิม</span>
+            </button>
+            <button
+              className="appointment-action"
+              type="button"
+              onClick={() => navigate({ to: '/appointments/history' })}
+            >
+              <History size={33} strokeWidth={2} aria-hidden="true" />
+              <strong>ประวัตินัดหมาย</strong>
+              <span>ดูย้อนหลัง</span>
+            </button>
+          </div>
+        </Card>
+
+        <button
+          className="help-card card rounded-[20px] border border-outline bg-white"
+          type="button"
+          onClick={() => navigate({ to: '/help' })}
+        >
+          <Headset
+            className="help-icon shrink-0 text-[#05b38e]"
+            size={25}
+            strokeWidth={1.8}
+            aria-hidden="true"
+          />
+          <span className="help-copy min-w-0 flex-1">
+            <strong>ต้องการความช่วยเหลือเพิ่มเติม?</strong>
+            <span>สอบถามระบบ AI หรือเลือกคำถามคัดกรอง</span>
+          </span>
+          <span className="help-arrow">
+            <ChevronRight size={24} strokeWidth={2} />
+          </span>
+        </button>
+      </main>
+
+      <dialog
+        ref={dialogRef}
+        className="app-dialog"
+        aria-labelledby="dialog-title"
+        onClose={() => setDialog(null)}
+      >
+        <button
+          className="icon-button dialog-close absolute top-[5px] right-2.5 inline-flex h-11 w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-navy"
+          type="button"
+          aria-label="ปิด"
+          onClick={() => dialogRef.current.close()}
+        >
+          <X size={22} />
+        </button>
+        <h2 id="dialog-title">{dialog?.title}</h2>
+        <p>{dialog?.message}</p>
+      </dialog>
+    </>
+  )
+}
