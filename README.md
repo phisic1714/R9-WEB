@@ -102,3 +102,14 @@ Terminal 2:
 Copy the new `https://...trycloudflare.com/` URL shown by cloudflared to the Developing Endpoint URL each time the tunnel is restarted. Keep the computer and both processes running during testing. The URL is publicly accessible while the tunnel runs. This preview uses the build output: after editing source files, run `npm.cmd run build` again.
 
 The application HTTP routes and assets have been verified through the tunnel. LINE SDK initialization still needs an end-to-end check in LINE after saving the Endpoint URL; this was not changed in the LINE console automatically.
+
+## TanStack Router (file-based)
+
+Route files live in src/routes/. The Vite plugin generates src/routeTree.gen.js automatically during npm run dev and npm run build. Do not edit the generated tree manually; keep it in version control. src/router.js only creates the router instance with the configured base path.
+
+- src/routes/__root.jsx: shared layout (Outlet) and 404 handling.
+- src/routes/index.jsx: /, renders the existing App.
+- To add /profile, create src/routes/profile.jsx and export Route = createFileRoute('/profile')({ component: ProfilePage }).
+- A file named users.$id.jsx maps to /users/$id (for example /users/123).
+
+Use TanStack Link for internal navigation. Route generation runs before the React Vite plugin, with JavaScript output and automatic code splitting. The router uses import.meta.env.BASE_URL, so VITE_BASE_PATH applies to routes and assets. LIFF initialization still completes before browser history is created. Existing Nginx SPA fallbacks handle direct page loads and refreshes.
