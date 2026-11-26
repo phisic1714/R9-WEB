@@ -1,6 +1,4 @@
 node_modules/
 dist/
 dist-ssr/
-.tanstack/
-src/routeTree.gen.js
 package-lock.json

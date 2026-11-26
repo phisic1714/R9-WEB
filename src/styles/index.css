@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@import '@fontsource/noto-sans-thai/400.css';
+@import '@fontsource/noto-sans-thai/500.css';
+@import '@fontsource/noto-sans-thai/600.css';
+@import '@fontsource/noto-sans-thai/700.css';
+
+@layer base {
+  :root {
+    font-family: 'Noto Sans Thai', sans-serif;
+    color: #132036;
+    background: #eaf2f5;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    min-width: 320px;
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+  button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  a {
+    touch-action: manipulation;
+  }
+  button:focus-visible,
+  a:focus-visible {
+    outline: 3px solid #087f8c;
+    outline-offset: 3px;
+  }
+  button {
+    color: inherit;
+  }
+  h1,
+  h2,
+  p {
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 700;
+  }
+  button:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  #center {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+}
+
+@theme {
+  --color-primary: #0ab189;
+  --color-primary-dark: #079c79;
+  --color-navy: #10285b;
+  --color-ink: #132036;
+  --color-muted: #6f7787;
+  --color-outline: #cbdaeb;
+  --font-sans: 'Noto Sans Thai', sans-serif;
+  --breakpoint-desktop: 56.25rem;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  --color-background: #ffffff;
+  --color-card: #ffffff;
+  --color-card-foreground: #132036;
+  --color-foreground: #132036;
+  --color-border: #cbdaeb;
+  --color-muted-foreground: #6f7787;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #edf2ff;
+  --color-secondary-foreground: #132036;
+  --color-accent: #eaf7f3;
+  --color-accent-foreground: #0e4a42;
+  --color-ring: #0ab189;
+  --color-input: #d8e2eb;
+  --color-destructive: #cf3846;
+}

@@ -1,0 +1,47 @@
+/* Shared app header; independent of individual page layouts. */
+
+.app-header {
+  min-height: 64px;
+  padding-top: env(safe-area-inset-top);
+  display: flex;
+  align-items: center;
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  gap: clamp(12px, 5.5vw, 22px);
+  background: #fbfbfb;
+  color: #10285b;
+}
+.app-header h1 {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.desktop-brand,
+.desktop-navigation {
+  display: none;
+}
+
+.sidebar-navigation a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #465775;
+  text-decoration: none;
+  font-size: 14px;
+}
+.sidebar-navigation a:hover {
+  background: #eff8f5;
+}
+.sidebar-navigation a[data-status='active'] {
+  background: #dcf5ec;
+  color: #008568;
+  font-weight: 600;
+}
