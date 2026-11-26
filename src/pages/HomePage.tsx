@@ -4,7 +4,7 @@ import Modal from '../components/Modal'
 import { useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useDemo } from '../lib/demo-context'
-import AppointmentTicket from '../components/AppointmentTicket'
+import AppointmentTicket from './appointments/components/AppointmentTicket'
 import liff from '@line/liff'
 import {
   BadgeCheck,

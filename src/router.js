@@ -42,19 +42,19 @@ const routeTree = rootRoute.addChildren([
     getParentRoute: () => rootRoute,
     path: '/appointments',
     staticData: { title: 'นัดหมายของฉัน' },
-    component: lazyRouteComponent(() => import('./pages/AppointmentsPage.tsx')),
+    component: lazyRouteComponent(() => import('./pages/appointments/AppointmentsPage.tsx')),
   }),
   createRoute({
     getParentRoute: () => rootRoute,
     path: '/appointments/new',
-    staticData: { title: 'นัดหมายใหม่', pageClassName: 'booking-page' },
-    component: lazyRouteComponent(() => import('./pages/NewAppointmentPage.tsx')),
+    staticData: { title: 'นัดหมายการตรวจ', pageClassName: 'booking-page' },
+    component: lazyRouteComponent(() => import('./pages/appointments/NewAppointmentPage.tsx')),
   }),
   createRoute({
     getParentRoute: () => rootRoute,
     path: '/appointments/history',
     staticData: { title: 'ประวัตินัดหมาย' },
-    component: lazyRouteComponent(() => import('./pages/HistoryPage.tsx')),
+    component: lazyRouteComponent(() => import('./pages/appointments/HistoryPage.tsx')),
   }),
   createRoute({
     getParentRoute: () => rootRoute,

@@ -1,13 +1,13 @@
-import type { ModalProps } from '../components/Modal'
+import type { ModalProps } from '@/components/Modal'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import Modal from '../components/Modal'
+import Modal from '@/components/Modal'
 import { Link } from '@tanstack/react-router'
 import { CalendarDays, Plus } from 'lucide-react'
-import Card from '../components/Card'
-import AppointmentTicket from '../components/AppointmentTicket'
-import { useDemo } from '../lib/demo-context'
+import Card from '@/components/Card'
+import AppointmentTicket from './components/AppointmentTicket'
+import { useDemo } from '@/lib/demo-context'
 function ModalSelectHosp({ open, onOpenChange }: Pick<ModalProps, 'open' | 'onOpenChange'>) {
   return (
     <Modal

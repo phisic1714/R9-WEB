@@ -1,7 +1,13 @@
 import { createContext, useContext } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 export type Patient = { name: string; hn: string; phone: string; email: string }
-export type Appointment = { department: string; date: string; time: string }
+export type Appointment = {
+  department: string
+  date: string
+  time: string
+  doctor?: string
+  reason?: string
+}
 export type Feedback = { rating: number; topics: string[]; comment: string; anonymous: boolean }
 type DemoState = {
   patient: Patient

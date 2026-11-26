@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import { History } from 'lucide-react'
-import Card from '../components/Card'
+import Card from '@/components/Card'
 export default function HistoryPage() {
   return (
     <>

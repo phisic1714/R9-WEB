@@ -1,5 +1,5 @@
 import { CalendarDays, Clock, MapPin, Stethoscope } from 'lucide-react'
-import { useDemo } from '../lib/demo-context'
+import { useDemo } from '@/lib/demo-context'
 export default function AppointmentTicket({ queue = 'A-042' }) {
   const { patient, appointment } = useDemo()
   return (
@@ -58,7 +58,7 @@ export default function AppointmentTicket({ queue = 'A-042' }) {
           <Stethoscope size={34} />
         </span>
         <div>
-          <strong>นพ.เกียรติภูมิ ภักดีดำรงค์</strong>
+          <strong>{appointment?.doctor || 'นพ.เกียรติภูมิ ภักดีดำรงค์'}</strong>
           <p className="blue text-[#0089ba]">อายุรกรรมทั่วไป</p>
           <small>★ 4.90</small>
         </div>

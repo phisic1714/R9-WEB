@@ -6,7 +6,7 @@ import { Link } from '@tanstack/react-router'
 import { MapPin, QrCode, Clock, Pill, TriangleAlert, Check, ReceiptText } from 'lucide-react'
 import Card from '../components/Card'
 import ServiceSteps from '../components/ServiceSteps'
-import AppointmentTicket from '../components/AppointmentTicket'
+import AppointmentTicket from './appointments/components/AppointmentTicket'
 export default function ServicePage() {
   const [step, setStep] = useState(0)
   return (
