@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { useForm, useSelector } from '@tanstack/react-form'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, Check, CircleCheck } from 'lucide-react'
+import { ArrowLeft, Atom, Check, CircleCheck, CpuAi } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { FieldError } from '@/components/ui/field'
-import Modal from '@/components/Modal'
 import { useDemo } from '@/lib/demo-context'
 import Stepper from './components/Stepper'
 import ClinicStep from './components/ClinicStep'
@@ -15,6 +14,93 @@ import DateTimeStep from './components/DateTimeStep'
 import ConfirmStep, { BookingAdvice } from './components/ConfirmStep'
 import { clinics, doctors, timeSlots, defaultBookingValues } from './booking-data'
 import type { BookingValues } from './booking-data'
+import Modal from '@/components/Modal'
+import { Input } from '@/components/ui/input'
+import ClinicCard from './components/ClinicCard'
+
+type AssessmentModalProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSelectClinic: (id: string) => void
+}
+
+function AssessmentModal({ open, onOpenChange, onSelectClinic }: AssessmentModalProps) {
+  return (
+    <Modal open={open} onOpenChange={onOpenChange} title="ประเมินอาการด้วย AI" size="md">
+      <div className="flex flex-col gap-2">
+        <section className="flex flex-col gap-2 rounded-xl bg-[#102354] p-3 text-white">
+          <div className="flex flex-row items-center gap-2">
+            <Atom width={50} height={50} />
+            <div className="flex flex-col gap-1">
+              <p>AI ช่วยแนะนำ</p>
+              <p>ท่านสามารถแจ้งอาการของท่าน แล้วกดประเมินที่ปุ่มสีเขียว เพื่อรับคำแนะนำ</p>
+            </div>
+          </div>{' '}
+          <section
+            aria-label="ข้อความสนทนา"
+            tabIndex={0}
+            className="flex max-h-[min(40dvh,24rem)] min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain rounded-2xl border-2 p-3 [&>div]:shrink-0 [&>div]:wrap-break-word"
+          >
+            <div className="max-w-2/3 self-end rounded-sm bg-[#09AFD0] p-1">มีอาการไอและเจ็บคอ</div>
+            <div className="max-w-2/3 self-start rounded-sm bg-white p-1 text-black">
+              สวัสดีครับ ยินดีให้คำแนะนำเบื้องต้นครับ จากอาการที่แจ้งมา ขอแนะนำให้เข้ารับการตรวจที่ คลินิกอายุรกรรมทั่วไป
+              เนื่องจากอาการ...
+            </div>{' '}
+            <div className="max-w-2/3 self-start rounded-sm bg-white p-1 text-black">
+              สวัสดีครับ ยินดีให้คำแนะนำเบื้องต้นครับ จากอาการที่แจ้งมา ขอแนะนำให้เข้ารับการตรวจที่ คลินิกอายุรกรรมทั่วไป
+              เนื่องจากอาการ...
+            </div>{' '}
+            <div className="max-w-2/3 self-start rounded-sm bg-white p-1 text-black">
+              สวัสดีครับ ยินดีให้คำแนะนำเบื้องต้นครับ จากอาการที่แจ้งมา ขอแนะนำให้เข้ารับการตรวจที่ คลินิกอายุรกรรมทั่วไป
+              เนื่องจากอาการ...
+            </div>{' '}
+            <div className="max-w-2/3 self-start rounded-sm bg-white p-1 text-black">
+              สวัสดีครับ ยินดีให้คำแนะนำเบื้องต้นครับ จากอาการที่แจ้งมา ขอแนะนำให้เข้ารับการตรวจที่ คลินิกอายุรกรรมทั่วไป
+              เนื่องจากอาการ...
+            </div>
+          </section>
+          <Input required placeholder="ระบุอาการของท่าน เช่น ปวดหัว หรือ ไอ" />
+          <Button className="flex flex-row gap-1">
+            <CpuAi /> <p>ประเมินอาการด้วย AI</p>
+          </Button>
+        </section>
+        <section className="rounded-2xl border p-1">
+          <ClinicCard
+            key={clinics?.[0]?.id}
+            clinic={clinics?.[0]}
+            doctorCount={doctors.length}
+            onSelect={onSelectClinic}
+          />
+        </section>
+      </div>
+    </Modal>
+  )
+}
+
+type BookingSuccessModalProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onViewAppointments: () => void
+}
+
+function BookingSuccessModal({ open, onOpenChange, onViewAppointments }: BookingSuccessModalProps) {
+  return (
+    <Modal
+      open={open}
+      onOpenChange={onOpenChange}
+      title="บันทึกนัดหมายตัวอย่างแล้ว"
+      description="ยังไม่ได้ส่งการจองให้โรงพยาบาล"
+      footer={
+        <Button type="button" onClick={onViewAppointments}>
+          ดูนัดหมายของฉัน
+        </Button>
+      }
+    >
+      <CircleCheck className="mx-auto mb-3 size-12 text-primary" />
+      <p className="text-center">ข้อมูลที่เลือกจะแสดงในหน้านัดหมายของฉันระหว่างใช้งานแอปครั้งนี้</p>
+    </Modal>
+  )
+}
 
 export default function NewAppointmentPage() {
   const [step, setStep] = useState(0)
@@ -68,11 +154,9 @@ export default function NewAppointmentPage() {
 
   return (
     <>
-      <div className="mx-auto grid w-full max-w-[1000px] gap-3 text-ink desktop:gap-5">
+      <div className="mx-auto grid w-full max-w-[1000px] grid-cols-1 gap-3 text-ink desktop:gap-5">
         <Stepper step={step} />
-        <p className="px-1 text-[10px] text-muted">
-          ข้อมูลตัวอย่างสำหรับทดลองนัดหมาย ยังไม่ได้เชื่อมต่อระบบโรงพยาบาล
-        </p>
+
         <form
           noValidate
           onSubmit={(event) => {
@@ -80,7 +164,7 @@ export default function NewAppointmentPage() {
             event.stopPropagation()
             void form.handleSubmit()
           }}
-          className="grid min-w-0 gap-3 desktop:gap-5"
+          className="grid min-w-0 grid-cols-1 gap-3 desktop:gap-5"
         >
           {step === 0 && (
             <ClinicStep
@@ -216,39 +300,26 @@ export default function NewAppointmentPage() {
         </form>
         {step === 3 && <BookingAdvice />}
       </div>
-      <Modal
+      <AssessmentModal
         open={assessmentOpen}
         onOpenChange={setAssessmentOpen}
-        title="ประเมินอาการด้วย AI"
-        description="ฟีเจอร์นี้ยังไม่เชื่อมต่อระบบประเมินอาการ"
-      >
-        <p>
-          สามารถเลือกคลินิกจากรายการเพื่อทดลองขั้นตอนการนัดหมายได้ หากไม่แน่ใจว่าต้องพบแผนกใด กรุณาสอบถามโรงพยาบาล
-        </p>
-      </Modal>
-      <Modal
+        onSelectClinic={(id) => {
+          form.reset({ ...defaultBookingValues, clinicId: id })
+          setAssessmentOpen(false)
+          changeStep(1)
+        }}
+      />
+      <BookingSuccessModal
         open={complete}
         onOpenChange={(open) => {
           setComplete(open)
           if (!open) void navigate({ to: '/appointments' })
         }}
-        title="บันทึกนัดหมายตัวอย่างแล้ว"
-        description="ยังไม่ได้ส่งการจองให้โรงพยาบาล"
-        footer={
-          <Button
-            type="button"
-            onClick={() => {
-              setComplete(false)
-              void navigate({ to: '/appointments' })
-            }}
-          >
-            ดูนัดหมายของฉัน
-          </Button>
-        }
-      >
-        <CircleCheck className="mx-auto mb-3 size-12 text-primary" />
-        <p className="text-center">ข้อมูลที่เลือกจะแสดงในหน้านัดหมายของฉันระหว่างใช้งานแอปครั้งนี้</p>
-      </Modal>
+        onViewAppointments={() => {
+          setComplete(false)
+          void navigate({ to: '/appointments' })
+        }}
+      />
     </>
   )
 }

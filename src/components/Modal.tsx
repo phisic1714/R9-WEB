@@ -17,6 +17,7 @@ export type ModalProps = {
   description?: ReactNode
   children: ReactNode
   footer?: ReactNode
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
 }
 
@@ -28,13 +29,20 @@ export default function Modal({
   children,
   footer,
   className,
+  size = 'md',
 }: ModalProps) {
   const opener = useRef<HTMLElement | null>(null)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          'max-h-[85dvh] overflow-y-auto rounded-2xl border-outline text-ink sm:max-w-md',
+          'max-h-[85dvh] w-[calc(100%-2rem)] overflow-y-auto rounded-2xl border-outline text-ink',
+          {
+            sm: 'max-w-sm sm:max-w-sm',
+            md: 'max-w-xl sm:max-w-xl',
+            lg: 'max-w-4xl sm:max-w-4xl',
+            xl: 'max-w-6xl sm:max-w-6xl',
+          }[size],
           className,
         )}
         onOpenAutoFocus={() => {
@@ -53,7 +61,7 @@ export default function Modal({
             <DialogDescription className="leading-relaxed">{description}</DialogDescription>
           )}
         </DialogHeader>
-        <div className="text-sm leading-7 text-muted">{children}</div>
+        <div className="min-w-0 text-sm leading-7 wrap-break-word text-muted">{children}</div>
         {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>

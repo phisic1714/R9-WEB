@@ -1,6 +1,7 @@
 import {
   Building2,
   CalendarDays,
+  CircleCheck,
   ClipboardCheck,
   DoorOpen,
   MapPin,
@@ -19,7 +20,56 @@ import { DoctorProfile } from './DoctorStep'
 import { formatBookingDate } from '../booking-data'
 import type { Clinic, Doctor } from '../booking-data'
 import type { Patient } from '@/lib/demo-context'
+import { Button } from '@/components/ui/button'
+import Modal from '@/components/Modal'
 
+function ModalEditRight() {
+  const rights = [
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+    {
+      label: 'สิทธิหลักประกันสุขภาพแห่งชาติ (บัตรทอง 30บาท)',
+      description: 'โรงพยาบาลคู่สัญญาหลัก: รพ.มหาราชนครราชสีมา',
+    },
+  ]
+  return (
+    <Modal open={false} title="เลือกสิทธิการรักษา">
+      <div className="flex max-h-96 min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain">
+        {rights.map((v, index) => (
+          <div key={index} className="flex shrink-0 flex-col rounded-lg border p-2">
+            <div className="flex flex-row justify-between">
+              <p>{v?.label}</p>
+              <CircleCheck />
+            </div>
+            <p>{v?.description}</p>
+          </div>
+        ))}
+      </div>
+    </Modal>
+  )
+}
 export default function ConfirmStep({
   clinic,
   doctor,
@@ -118,14 +168,18 @@ export default function ConfirmStep({
             ยังไม่ได้เชื่อมต่อข้อมูลสิทธิจริง กรุณาเตรียมบัตรประชาชนในวันรับบริการ
           </p>
         </div>
+        <div className="flex flex-row justify-end">
+          <Button variant={'link'}>แก้ไขสิทธิการรักษา</Button>
+        </div>
       </section>
+      <ModalEditRight />
     </div>
   )
 }
 
 export function BookingAdvice() {
   return (
-    <section className="rounded-xl bg-white px-6 desktop:col-span-2">
+    <section className="rounded-xl bg-white px-6">
       <Accordion type="single" collapsible>
         <AccordionItem value="instructions" className="border-0">
           <AccordionTrigger className="py-5 text-base font-bold">
